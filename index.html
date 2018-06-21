@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+        <form v-on:submit.prevent='addTodo'>
+            <input v-model='currentTodos' type='text' />
+            <button v-bind:disabled='isDisabled' type='submit'>Add Todo</button>
+        </form>
+        <template v-if='todos.length > 0'> 
+            <ul>
+                <li v-for='(todo, index) in todos'>
+                    {{ todo | capitalize }} <button v-on:click='deleteItem(index)'>x</button>
+                </li>
+            </ul>
+        </template>
+        <p v-else>No Content Added</p>
+    </div>
+    <div id='app'>
+        <button v-on:click='increment'>Increment</button>
+        <p>Counter: {{counter}}</p>
+        <p>Clicks: {{clicks}}</p>
+    </div>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                counter: 0,
+                clicks: 0
+            },
+            methods: {
+                increment(){
+                    this.counter = this.counter + 2;
+                    this.clicks++;
+                }
+            }
+        });
+        var root = new Vue({
+            el: '#root',
+            data: {
+                todos: ['Vue js', 'React js', 'Angular'],
+                currentTodos: ''
+            },
+            methods: {
+                addTodo: function(){
+                    this.todos.push(this.currentTodos)
+                    this.currentTodos= ''
+                },
+                deleteItem: function(index){
+                    this.todos.splice(index, 1)
+                }
+            },
+            filters: {
+                capitalize: function(value){
+                    return value.charAt(0).toUpperCase() + value.slice(1);
+                }
+            },
+            computed: {
+                isDisabled: function(){
+                    return this.currentTodos ? false : true
+                }
+            }
+        })
+    </script>
+</body>
+</html>
